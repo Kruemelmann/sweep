@@ -2,8 +2,7 @@
 <!--![build status](https://github.com/kruemelmann/komodo/actions/workflows/workflow.yml/badge.svg)-->
 <!--![release status](https://github.com/kruemelmann/komodo/actions/workflows/release.yml/badge.svg)-->
 
-TODO
-
+Small command line tool for sharing your desktop to a browser gui.
 
 ## Installation
 
