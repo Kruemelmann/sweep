@@ -17,15 +17,16 @@ func StartWebserver(port int) {
 	host := fmt.Sprintf("0.0.0.0:%v", port)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/screencount", ScreenCountHandler)
+	r.HandleFunc("/ws", BuildWebsocket())
 	r.PathPrefix("/").Handler(getStaticFilesHandler(FrontendFS))
 	log.Fatal(http.ListenAndServe(host, r))
 }
 
 //TODO
-func ScreenCountHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
-}
+//r.HandleFunc("/screencount", ScreenCountHandler)
+//func ScreenCountHandler(w http.ResponseWriter, r *http.Request) {
+//w.Write([]byte("Gorilla!\n"))
+//}
 
 //utils
 func getStaticFilesHandler(fefiles embed.FS) http.Handler {
