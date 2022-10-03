@@ -16,26 +16,23 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "sweep",
-	Short: "TODO",
-	Long:  `sweep is a small commandline tool to screencast you window to a different divices browser inside your network`,
+// serveCmd represents the serve command
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Start serving the screenvideo",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			cmd.Help()
-		}
+		fmt.Println("serve called")
 	},
 }
 
-func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
-}
-
 func init() {
-	rootCmd.CompletionOptions.DisableDefaultCmd = true
-	rootCmd.CompletionOptions.DisableNoDescFlag = true
-	rootCmd.CompletionOptions.DisableDescriptions = true
+	rootCmd.AddCommand(serveCmd)
+
+	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
