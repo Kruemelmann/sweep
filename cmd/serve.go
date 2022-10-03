@@ -16,12 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"image/png"
-	"os"
-
-	"github.com/kbinani/screenshot"
-	"github.com/kruemelmann/sweep/cmd/web"
+	"github.com/kruemelmann/sweep/web"
 	"github.com/spf13/cobra"
 )
 
@@ -40,19 +35,4 @@ var serveCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(serveCmd)
 	serveCmd.Flags().IntP("port", "p", 9100, "Port to run sweep gui on (default: 9100)")
-}
-
-func NextFrame() {
-	screennum := 0
-	bounds := screenshot.GetDisplayBounds(screennum)
-
-	img, err := screenshot.CaptureRect(bounds)
-	if err != nil {
-		panic(err)
-	}
-	fileName := fmt.Sprintf("%d_%dx%d.png", screennum, bounds.Dx(), bounds.Dy())
-	file, _ := os.Create(fileName)
-	defer file.Close()
-	png.Encode(file, img)
-	fmt.Printf("#%d : %v \"%s\"\n", screennum, bounds, fileName)
 }

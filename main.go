@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/kruemelmann/sweep/cmd"
+import (
+	"github.com/kruemelmann/sweep/cmd"
+)
 
 func main() {
 	cmd.Execute()
