@@ -23,7 +23,7 @@ func StartWebserver(port int) {
 	go func() {
 		for {
 			UpdateGui()
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 	}()
 
