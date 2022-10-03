@@ -17,7 +17,10 @@ package cmd
 
 import (
 	"fmt"
+	"image/png"
+	"os"
 
+	"github.com/kbinani/screenshot"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +30,7 @@ var serveCmd = &cobra.Command{
 	Short: "Start serving the screenvideo",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+		ServeFunc()
 	},
 }
 
@@ -35,4 +38,24 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func ServeFunc() {
+	fmt.Println("serve called")
+	n := screenshot.NumActiveDisplays()
+
+	for i := 0; i < n; i++ {
+		bounds := screenshot.GetDisplayBounds(i)
+
+		img, err := screenshot.CaptureRect(bounds)
+		if err != nil {
+			panic(err)
+		}
+		fileName := fmt.Sprintf("%d_%dx%d.png", i, bounds.Dx(), bounds.Dy())
+		file, _ := os.Create(fileName)
+		defer file.Close()
+		png.Encode(file, img)
+
+		fmt.Printf("#%d : %v \"%s\"\n", i, bounds, fileName)
+	}
 }
