@@ -15,6 +15,11 @@ var upgrader = websocket.Upgrader{
 
 var ws_connection *websocket.Conn
 
+func UpdateGui() {
+	if ws_connection != nil {
+		ws_connection.WriteJSON("update")
+	}
+}
 func BuildWebsocket() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		con, err := upgrader.Upgrade(w, r, nil)

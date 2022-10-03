@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/kbinani/screenshot"
@@ -18,6 +19,13 @@ var FrontendFS embed.FS
 
 func StartWebserver(port int) {
 	host := fmt.Sprintf("0.0.0.0:%v", port)
+
+	go func() {
+		for {
+			UpdateGui()
+			time.Sleep(1 * time.Second)
+		}
+	}()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ws", BuildWebsocket())
