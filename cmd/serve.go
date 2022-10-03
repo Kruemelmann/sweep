@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/kbinani/screenshot"
+	"github.com/kruemelmann/sweep/cmd/web"
 	"github.com/spf13/cobra"
 )
 
@@ -30,32 +31,28 @@ var serveCmd = &cobra.Command{
 	Short: "Start serving the screenvideo",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		ServeFunc()
+		port, _ := cmd.Flags().GetInt("port")
+
+		web.StartWebserver(port)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serveCmd.Flags().IntP("port", "p", 9100, "Port to run sweep gui on (default: 9100)")
 }
 
-func ServeFunc() {
-	fmt.Println("serve called")
-	n := screenshot.NumActiveDisplays()
+func NextFrame() {
+	screennum := 0
+	bounds := screenshot.GetDisplayBounds(screennum)
 
-	for i := 0; i < n; i++ {
-		bounds := screenshot.GetDisplayBounds(i)
-
-		img, err := screenshot.CaptureRect(bounds)
-		if err != nil {
-			panic(err)
-		}
-		fileName := fmt.Sprintf("%d_%dx%d.png", i, bounds.Dx(), bounds.Dy())
-		file, _ := os.Create(fileName)
-		defer file.Close()
-		png.Encode(file, img)
-
-		fmt.Printf("#%d : %v \"%s\"\n", i, bounds, fileName)
+	img, err := screenshot.CaptureRect(bounds)
+	if err != nil {
+		panic(err)
 	}
+	fileName := fmt.Sprintf("%d_%dx%d.png", screennum, bounds.Dx(), bounds.Dy())
+	file, _ := os.Create(fileName)
+	defer file.Close()
+	png.Encode(file, img)
+	fmt.Printf("#%d : %v \"%s\"\n", screennum, bounds, fileName)
 }
