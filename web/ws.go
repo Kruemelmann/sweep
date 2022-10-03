@@ -20,6 +20,7 @@ func UpdateGui() {
 		ws_connection.WriteJSON("update")
 	}
 }
+
 func BuildWebsocket() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		con, err := upgrader.Upgrade(w, r, nil)
