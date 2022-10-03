@@ -3,11 +3,14 @@ package web
 import (
 	"embed"
 	"fmt"
+	"image"
+	"image/jpeg"
 	"io/fs"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/kbinani/screenshot"
 )
 
 //go:embed static
@@ -18,17 +21,29 @@ func StartWebserver(port int) {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ws", BuildWebsocket())
+	r.HandleFunc("/frame", FrameHandler)
 	r.PathPrefix("/").Handler(getStaticFilesHandler(FrontendFS))
 	log.Fatal(http.ListenAndServe(host, r))
 }
 
-//TODO
-//r.HandleFunc("/screencount", ScreenCountHandler)
-//func ScreenCountHandler(w http.ResponseWriter, r *http.Request) {
-//w.Write([]byte("Gorilla!\n"))
-//}
+func FrameHandler(w http.ResponseWriter, r *http.Request) {
+	if err := jpeg.Encode(w, nextFrame(), nil); err != nil {
+		log.Printf("failed to encode: %v", err)
+	}
+}
 
 //utils
+func nextFrame() *image.RGBA {
+	screennum := 0
+	bounds := screenshot.GetDisplayBounds(screennum)
+
+	img, err := screenshot.CaptureRect(bounds)
+	if err != nil {
+		panic(err)
+	}
+	return img
+}
+
 func getStaticFilesHandler(fefiles embed.FS) http.Handler {
 	matches, _ := fs.Glob(fefiles, "static")
 	if len(matches) != 1 {
