@@ -7,7 +7,6 @@ client.onopen = () => {
     console.log('WebSocket Client Connected');
 };
 client.onmessage = (message) => {
-    console.log('reload image');
     loadImage()
 };
 
@@ -28,7 +27,6 @@ function renderImage(canvas, blob) {
       URL.revokeObjectURL(event.target.src)
       ctx.canvas.width  = window.innerWidth;
       ctx.canvas.height = window.innerHeight;
-      ctx.drawImage(event.target, 0, 0)
       ctx.drawImage(img, 0, 0, img.width, img.height,  // source rectangle
                    0, 0, canvas.width, canvas.height); // destination rectangle
 
