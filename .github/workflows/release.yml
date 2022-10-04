@@ -36,6 +36,5 @@ jobs:
           token: ${{ github.token }}
           files: |
             ./bin/darwin/amd64/sweep-darwin-x86_64
-            ./bin/darwin/arm64/sweep-darwin-aarch64
             ./bin/linux/amd64/sweep-linux-x86_64
 
