@@ -1,0 +1,41 @@
+name: release sweep
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build_release:
+    name: build_release
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: Install bazelisk
+        run: |
+          curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.1.0/bazelisk-linux-amd64"
+          mkdir -p "${GITHUB_WORKSPACE}/bin/"
+          mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
+          chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
+      -
+        name: Build all assets by crosscompiling them
+        run: ./scripts/release.sh
+      -
+        name: Make target binarys executable
+        run: "chmod -R 777 ./bin"
+      -
+        name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: CHANGELOG.md
+          token: ${{ github.token }}
+          files: |
+            ./bin/darwin/amd64/sweep-darwin-x86_64
+            ./bin/darwin/arm64/sweep-darwin-aarch64
+            ./bin/linux/amd64/sweep-linux-x86_64
+
