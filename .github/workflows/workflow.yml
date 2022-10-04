@@ -1,4 +1,4 @@
-name: build komodo
+name: build sweep
 # (add test later:))
 
 on:
