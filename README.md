@@ -14,7 +14,7 @@ echo "TODO"
 
 ### Start screencasting
 ```bash
-sweep start
+sweep serve
 ```
 
 ## Contributing
